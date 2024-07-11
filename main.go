@@ -4,12 +4,7 @@ import (
 	"fmt"
 	"math/rand"
 	"net/http"
-	"time"
 )
-
-type urlShortener struct {
-	urls map[string]string
-}
 
 func handleshorten(w http.ResponseWriter, r *http.Request) {
 
@@ -28,7 +23,7 @@ func handleshorten(w http.ResponseWriter, r *http.Request) {
 	shortkey := generateShortKey()
 	urls[shortkey] = originalUrl
 
-	shortenedUrl := fmt.Sprintf("http://localhost:8080/short/%s", shortkey)
+	shortenedUrl := fmt.Sprintf("http://localhost:4020/short/%s", shortkey)
 
 	w.Header().Set("Content-Type", "text/html")
 	fmt.Fprint(w, `
@@ -68,7 +63,6 @@ func generateShortKey() string {
 	const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 	const keyLength = 6
 
-	rand.Seed(time.Now().UnixNano())
 	shortKey := make([]byte, keyLength)
 	for i := range shortKey {
 		shortKey[i] = charset[rand.Intn(len(charset))]
@@ -79,7 +73,7 @@ func generateShortKey() string {
 func handleForm(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method == http.MethodPost {
-		http.Redirect(w, r, "/shroten", http.StatusSeeOther)
+		http.Redirect(w, r, "/shorten", http.StatusSeeOther)
 
 		return
 	}
@@ -105,6 +99,8 @@ func handleForm(w http.ResponseWriter, r *http.Request) {
 var urls = make(map[string]string)
 
 func main() {
+
+	// rand.Seed(time.Now().UnixNano())
 	http.HandleFunc("/", handleForm)
 	http.HandleFunc("/shorten", handleshorten)
 	http.HandleFunc("/short/", handleRedirect)
