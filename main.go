@@ -24,7 +24,7 @@ func handleshorten(w http.ResponseWriter, r *http.Request) {
 	shortkey := generateShortKey()
 	urls[shortkey] = originalUrl
 
-	shortenedUrl := fmt.Sprintf("http://localhost:4020/short/%s", shortkey)
+	shortenedUrl := fmt.Sprintf("http://%s/short/%s", r.Host, shortkey)
 
 	w.Header().Set("Content-Type", "text/html")
 	fmt.Fprint(w, `
