@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math/rand"
 	"net/http"
+	"os"
 )
 
 func handleshorten(w http.ResponseWriter, r *http.Request) {
@@ -106,5 +107,10 @@ func main() {
 	http.HandleFunc("/short/", handleRedirect)
 
 	fmt.Println("url shortener running on :4020")
-	http.ListenAndServe(":4020", nil)
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "4020" // Fallback to a default port for local testing
+	}
+	http.ListenAndServe(":"+port, nil)
+
 }
