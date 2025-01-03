@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: url-shortener
+    env: go
+    buildCommand: go build -o app .
+    startCommand: ./app
+    envVars:
+      - key: PORT
+        value: 4020
